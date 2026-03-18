@@ -1,10 +1,35 @@
-"""Database connection and schema initialization module.
+"""Database connection and schema initialisation."""
 
-Phase 1 note:
-- Keep this file as scaffold only.
-- Implement connection handling and first-run schema creation in Phase 2.
-"""
+from pathlib import Path
+import sqlite3
 
-# TODO: Add function to open SQLite connection.
-# TODO: Add function to initialize schema from sql/schema.sql.
-# TODO: Ensure foreign key enforcement is enabled per connection.
+BASE_DIR = Path(__file__).resolve().parents[2]
+DEFAULT_DB_PATH = BASE_DIR / "game_stats.db"
+
+DEFAULT_SCHEMA_PATH = BASE_DIR / "sql" / "schema.sql"
+
+
+def get_db_connection(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
+    """Connect to SQLite database."""
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    conn.execute("PRAGMA foreign_keys = ON")
+    return conn
+
+
+def initialise_db(conn: sqlite3.Connection, schema_path: Path = DEFAULT_SCHEMA_PATH) -> None:
+    """Initialise database schema from SQL file."""
+    path = Path(schema_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Schema file not found: {schema_path}")
+    
+    schema_sql = path.read_text(encoding="utf-8")
+    conn.executescript(schema_sql)
+    conn.commit()
+
+def ensure_database(db_path: Path | str = DEFAULT_DB_PATH, schema_path: Path | str = DEFAULT_SCHEMA_PATH) -> sqlite3.Connection:
+    """Ensure database exists and is initialised."""
+    conn = get_db_connection(db_path)
+    initialise_db(conn)
+    return conn
