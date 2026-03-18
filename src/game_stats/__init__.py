@@ -1,0 +1,1 @@
+"""SQLite Game Stats package."""
