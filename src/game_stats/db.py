@@ -4,21 +4,21 @@ from pathlib import Path
 import sqlite3
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_DB_PATH = BASE_DIR / "game_stats.db"
+DEFAULT_DB_PATH = BASE_DIR / "stats.db"
 
 DEFAULT_SCHEMA_PATH = BASE_DIR / "sql" / "schema.sql"
 
 
-def get_db_connection(db_path: Path = DEFAULT_DB_PATH) -> sqlite3.Connection:
+def get_db_connection(db_path: Path | str = DEFAULT_DB_PATH) -> sqlite3.Connection:
     """Connect to SQLite database."""
 
-    conn = sqlite3.connect(db_path)
+    conn = sqlite3.connect(str(db_path))
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     return conn
 
 
-def initialise_db(conn: sqlite3.Connection, schema_path: Path = DEFAULT_SCHEMA_PATH) -> None:
+def initialise_db(conn: sqlite3.Connection, schema_path: Path | str = DEFAULT_SCHEMA_PATH) -> None:
     """Initialise database schema from SQL file."""
     path = Path(schema_path)
     if not path.exists():
@@ -28,8 +28,8 @@ def initialise_db(conn: sqlite3.Connection, schema_path: Path = DEFAULT_SCHEMA_P
     conn.executescript(schema_sql)
     conn.commit()
 
-def ensure_database(db_path: Path | str = DEFAULT_DB_PATH, schema_path: Path | str = DEFAULT_SCHEMA_PATH) -> sqlite3.Connection:
-    """Ensure database exists and is initialised."""
+def check_database(db_path: Path | str = DEFAULT_DB_PATH, schema_path: Path | str = DEFAULT_SCHEMA_PATH) -> sqlite3.Connection:
+    """Check database exists and is initialised."""
     conn = get_db_connection(db_path)
-    initialise_db(conn)
+    initialise_db(conn, schema_path)
     return conn
