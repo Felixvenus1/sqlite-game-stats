@@ -1,0 +1,2 @@
+[console_scripts]
+game-stats = game_stats.main:main

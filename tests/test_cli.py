@@ -62,3 +62,47 @@ def test_cli_stats_and_delete(tmp_path: Path, capsys) -> None:
 
     delete_output = capsys.readouterr().out
     assert "Deleted session 1." in delete_output
+
+
+def test_cli_query_no_sessions_returns_zero(tmp_path: Path, capsys) -> None:
+    db_path = tmp_path / "empty.db"
+
+    query_code = main(["query", "--game", "Unknown", "--db-path", str(db_path)])
+    assert query_code == 0
+
+    output = capsys.readouterr().out
+    assert "No sessions found for 'Unknown'." in output
+
+
+def test_cli_log_invalid_values_returns_error_code(tmp_path: Path, capsys) -> None:
+    db_path = tmp_path / "invalid.db"
+
+    exit_code = main(
+        [
+            "log",
+            "--game",
+            "BadGame",
+            "--score",
+            "-10",
+            "--level",
+            "2",
+            "--duration",
+            "15",
+            "--db-path",
+            str(db_path),
+        ]
+    )
+
+    assert exit_code == 2
+    output = capsys.readouterr().out
+    assert "must be non-negative" in output
+
+
+def test_cli_delete_missing_session_returns_one(tmp_path: Path, capsys) -> None:
+    db_path = tmp_path / "delete_missing.db"
+
+    exit_code = main(["delete", "--session-id", "999", "--db-path", str(db_path)])
+    assert exit_code == 1
+
+    output = capsys.readouterr().out
+    assert "Session 999 not found." in output
