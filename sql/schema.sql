@@ -1,4 +1,4 @@
--- Project 01 schema skeleton (Phase 1)
+-- Project 01 schema (SQLite Game Stats)
 
 PRAGMA foreign_keys = ON;
 
