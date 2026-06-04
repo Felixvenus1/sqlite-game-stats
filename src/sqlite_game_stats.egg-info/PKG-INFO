@@ -1,3 +1,14 @@
+Metadata-Version: 2.4
+Name: sqlite-game-stats
+Version: 0.1.0
+Summary: CLI SQLite game session tracker
+Requires-Python: >=3.11
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.0; extra == "dev"
+Requires-Dist: ruff>=0.1; extra == "dev"
+
 # SQLite Game Stats Tracker
 
 A Python CLI project that tracks game sessions in a local SQLite database.
@@ -15,31 +26,10 @@ python -m game_stats log --game "Game Name" --score 100 --level 2 --duration 45
 python -m game_stats query --game "Game Name"
 python -m game_stats stats
 python -m game_stats delete --session-id 1
-python -m game_stats.pareto --output-dir docs/pareto
 
 # console script (after editable install)
 game-stats --help
-game-stats-pareto --help
 ```
-
-## Pareto Analysis Visualizations
-
-Generate Pareto charts from the included IT questionnaire data:
-
-```powershell
-python -m game_stats.pareto --output-dir docs/pareto
-```
-
-Optional interactive display (opens chart windows):
-
-```powershell
-python -m game_stats.pareto --output-dir docs/pareto --show
-```
-
-This produces:
-
-- `docs/pareto/pareto_items.png`: item-level Pareto chart using improvement gap (`5 - score`).
-- `docs/pareto/pareto_categories.png`: category-level Pareto chart using total improvement gap.
 
 ## CLI Command Reference
 
@@ -94,26 +84,6 @@ most_played_count: 2
 # Delete session
 > game-stats delete --session-id 2
 Deleted session 2.
-```
-
-## Database Schema
-
-```mermaid
-erDiagram
-    GAMES {
-        integer game_id PK
-        text    game_name UK
-        text    genre
-    }
-    SESSIONS {
-        integer session_id       PK
-        integer game_id          FK
-        integer score
-        integer level
-        integer duration_minutes
-        text    created_at
-    }
-    GAMES ||--o{ SESSIONS : "has"
 ```
 
 ## Repository Structure

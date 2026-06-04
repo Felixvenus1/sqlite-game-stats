@@ -1,0 +1,17 @@
+README.md
+pyproject.toml
+src/game_stats/__init__.py
+src/game_stats/__main__.py
+src/game_stats/cli.py
+src/game_stats/db.py
+src/game_stats/main.py
+src/game_stats/queries.py
+src/sqlite_game_stats.egg-info/PKG-INFO
+src/sqlite_game_stats.egg-info/SOURCES.txt
+src/sqlite_game_stats.egg-info/dependency_links.txt
+src/sqlite_game_stats.egg-info/entry_points.txt
+src/sqlite_game_stats.egg-info/requires.txt
+src/sqlite_game_stats.egg-info/top_level.txt
+tests/test_cli.py
+tests/test_db.py
+tests/test_queries.py
