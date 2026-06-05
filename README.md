@@ -1,119 +1,42 @@
 # SQLite Game Stats Tracker
 
-A Python CLI project that tracks game sessions in a local SQLite database.
+A hand-written Python CLI project that tracks game sessions in a local SQLite database.
 
-## Quick Start
+## Phase 1 Status
 
-```powershell
-python -m pip install -e .
-```
+Bootstrap complete: repository structure and placeholder modules are in place.
 
-## Run Commands
+## Functional Requirements (Project 01)
+
+- FR-01: Log a new game session.
+- FR-02: Query sessions for a specific game.
+- FR-03: Show aggregate statistics.
+- FR-04: Delete a session by session ID.
+- FR-05: Auto-create database on first run.
+- FR-06: Expose all actions through CLI commands.
+
+## Environment Verified
+
+Date: 2026-03-18
+
+- Python 3.11+: PASS
+- pytest installed: PASS
+- ruff installed: PASS
+- sqlite3 stdlib import: PASS
+- Git user.name configured: PASS
+- Git user.email configured: PASS
+- Git core.autocrlf=input: PASS
+- VS Code extension ms-python.python: PASS
+- VS Code extension ms-python.vscode-pylance: PASS
+- VS Code extension charliermarsh.ruff: PASS
+
+## Planned Commands (Phase 2)
 
 ```powershell
 python -m game_stats log --game "Game Name" --score 100 --level 2 --duration 45
 python -m game_stats query --game "Game Name"
 python -m game_stats stats
 python -m game_stats delete --session-id 1
-python -m game_stats.pareto --output-dir docs/pareto
-
-# console script (after editable install)
-game-stats --help
-game-stats-pareto --help
-```
-
-## Pareto Analysis Visualizations
-
-Generate Pareto charts from the included IT questionnaire data:
-
-```powershell
-python -m game_stats.pareto --output-dir docs/pareto
-```
-
-Optional interactive display (opens chart windows):
-
-```powershell
-python -m game_stats.pareto --output-dir docs/pareto --show
-```
-
-This produces:
-
-- `docs/pareto/pareto_items.png`: item-level Pareto chart using improvement gap (`5 - score`).
-- `docs/pareto/pareto_categories.png`: category-level Pareto chart using total improvement gap.
-
-## CLI Command Reference
-
-| Command | Purpose | Required Flags | Example |
-| :-- | :-- | :-- | :-- |
-| `log` | Create a new game session record | `--game`, `--score`, `--level`, `--duration` | `game-stats log --game "Hades" --score 1200 --level 8 --duration 45 --genre "Roguelike"` |
-| `query` | List sessions for a game | `--game` | `game-stats query --game "Hades"` |
-| `stats` | Show aggregate stats across all sessions | None | `game-stats stats` |
-| `delete` | Delete a session by its ID | `--session-id` | `game-stats delete --session-id 1` |
-
-Optional for all commands:
-
-- `--db-path <path>`: use a custom SQLite file instead of the default project `stats.db`.
-
-## Example Output
-
-```text
-> game-stats stats
-total_sessions: 3
-average_score: 200.0
-highest_score: 300
-most_played_game: Hades
-most_played_count: 2
-```
-
-## Sample Run
-
-```powershell
-# Log sessions
-> game-stats log --game "Hades" --score 500 --level 5 --duration 30 --genre "Roguelike"
-Logged session 1 for 'Hades'.
-
-> game-stats log --game "Celeste" --score 750 --level 8 --duration 45 --genre "Platformer"
-Logged session 2 for 'Celeste'.
-
-> game-stats log --game "Hades" --score 800 --level 7 --duration 40
-Logged session 3 for 'Hades'.
-
-# Query sessions
-> game-stats query --game "Hades"
-id=1 | game=Hades | genre=Roguelike | score=500 | level=5 | duration=30m | created_at=2026-03-18 10:00:00
-id=3 | game=Hades | genre=None | score=800 | level=7 | duration=40m | created_at=2026-03-18 10:05:00
-
-# View statistics
-> game-stats stats
-total_sessions: 3
-average_score: 683.33
-highest_score: 800
-most_played_game: Hades
-most_played_count: 2
-
-# Delete session
-> game-stats delete --session-id 2
-Deleted session 2.
-```
-
-## Database Schema
-
-```mermaid
-erDiagram
-    GAMES {
-        integer game_id PK
-        text    game_name UK
-        text    genre
-    }
-    SESSIONS {
-        integer session_id       PK
-        integer game_id          FK
-        integer score
-        integer level
-        integer duration_minutes
-        text    created_at
-    }
-    GAMES ||--o{ SESSIONS : "has"
 ```
 
 ## Repository Structure
