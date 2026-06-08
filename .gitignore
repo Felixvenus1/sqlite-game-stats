@@ -12,3 +12,7 @@ __pycache__/
 
 # IDE
 .vscode/
+
+# Coverage
+.coverage
+coverage.xml
